@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { Search, Compass, MapPin, Coffee, ArtTrack, Trees as Tree, Sparkles } from 'lucide-react';
+import { Search, Compass, MapPin, Coffee, Palette, Trees as Tree, Sparkles, User, Footprints } from 'lucide-react';
 
 export default function MapPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export default function MapPage() {
         <div className="flex gap-2 mt-3 overflow-x-auto no-scrollbar py-1">
           {[
             { id: '咖啡店', icon: <Coffee size={14}/> },
-            { id: '展览', icon: <ArtTrack size={14}/> },
+            { id: '展览', icon: <Palette size={14}/> },
             { id: '自然', icon: <Tree size={14}/> },
             { id: '季节专题', icon: <Compass size={14}/> }
           ].map(cat => (
