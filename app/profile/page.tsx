@@ -15,7 +15,7 @@ export default function ProfilePage() {
       {/* 1. 顶部背景与头像 */}
       <div className="relative h-48 bg-[#8B2B2B] shrink-0">
         <div className="absolute inset-0 opacity-10" 
-          style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', size: '20px' }} />
+          style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
         <div className="absolute top-12 right-6">
           <Settings className="text-white/80" size={20} />
         </div>
