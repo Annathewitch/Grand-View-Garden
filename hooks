@@ -1,0 +1,26 @@
+import { useState, useEffect } from 'react';
+
+export const useWalkingTracker = (isActive: boolean) => {
+  const [seconds, setSeconds] = useState(0);
+  const [distance, setDistance] = useState(0);
+
+  useEffect(() => {
+    let interval: any;
+    if (isActive) {
+      interval = setInterval(() => {
+        setSeconds(s => s + 1);
+        setDistance(d => d + 0.0005); // 模拟行走距离
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isActive]);
+
+  const formatTime = (s: number) => {
+    const hrs = Math.floor(s / 3600);
+    const mins = Math.floor((s % 3600) / 60);
+    const secs = s % 60;
+    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  return { time: formatTime(seconds), distance: distance.toFixed(2) };
+};
