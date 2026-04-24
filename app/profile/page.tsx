@@ -1,58 +1,68 @@
 "use client";
-import { Settings, RefreshCw, Footprints, Map as MapIcon, Heart, Compass, User, MapPin } from 'lucide-react';
-import AppContainer from '../../components/AppContainer';
+import { useState } from 'react';
+import { Settings, RefreshCw, Footprints, Map as MapIcon, Compass, User, MapPin } from 'lucide-react';
 
 export default function ProfilePage() {
+  const [bottomTab, setBottomTab] = useState("我的");
+
   return (
-    <AppContainer>
-      <div className="relative w-full h-full bg-white overflow-y-auto no-scrollbar pb-24">
+    <div style={appContainerStyle}>
+      <div style={contentAreaStyle}>
         {/* 顶部状态与设置 */}
-        <div className="flex justify-between items-center p-6 pt-12">
-          <Settings size={24} className="text-gray-800" />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '50px 20px 0' }}>
+          <Settings size={24} color="#333" />
         </div>
 
-        {/* 头像与用户信息 */}
-        <div className="px-6 space-y-4">
-          <div className="w-full aspect-square rounded-2xl overflow-hidden bg-gray-100">
-            <img src="/avatar.png" className="w-full h-full object-cover" alt="Profile" />
+        {/* 用户信息 */}
+        <div style={{ padding: '0 25px' }}>
+          <div style={avatarWrapper}>
+             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400" style={imgFit} />
           </div>
-          <h1 className="text-3xl font-black tracking-tight">林深时见鹿</h1>
-          <p className="text-gray-500 font-medium">Digital Nomad Explorer</p>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-600">
+          <h1 style={{ fontSize: '32px', fontWeight: '900', marginTop: '20px' }}>林深时见鹿</h1>
+          <p style={{ color: '#999', fontWeight: '500' }}>Digital Nomad Explorer</p>
+          <button style={creatorBtnStyle}>
             <RefreshCw size={14} /> 切换至创作者视图
           </button>
         </div>
 
         {/* 数据统计 */}
-        <div className="px-6 mt-10 space-y-8">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-gray-800"><Footprints size={20}/> <span className="font-bold">Total Steps</span></div>
-            <p className="text-3xl font-black tracking-tighter">124,890</p>
+        <div style={{ padding: '0 25px', marginTop: '40px' }}>
+          <div style={statItem}>
+            <div style={statLabel}><Footprints size={20}/> Total Steps</div>
+            <div style={statValue}>124,890</div>
           </div>
-          
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-gray-800"><MapIcon size={20}/> <span className="font-bold">Routes</span></div>
-            <p className="text-3xl font-black tracking-tighter">18 Entries</p>
-          </div>
-
-          <div className="pt-4">
-            <h2 className="text-2xl font-black tracking-tight flex items-center gap-2">Health & Consumption</h2>
-          </div>
-        </div>
-
-        {/* 底部导航栏 (需保持一致) */}
-        <div className="absolute bottom-0 left-0 right-0 h-[84px] bg-white border-t border-gray-100 flex justify-around items-center px-4 z-50 pb-5 text-gray-300">
-          <div className="flex flex-col items-center gap-1">
-            <MapPin size={22} /><span className="text-[10px] font-bold">大观</span>
-          </div>
-          <div className="flex flex-col items-center gap-1"><Compass size={22}/><span className="text-[10px] font-bold">路线</span></div>
-          <div className="relative w-12 h-12"><div className="absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 bg-blue-600 rounded-full border-[6px] border-white shadow-lg flex items-center justify-center text-white text-3xl font-light">+</div></div>
-          <div className="flex flex-col items-center gap-1"><Footprints size={22}/><span className="text-[10px] font-bold">游玩</span></div>
-          <div className="flex flex-col items-center gap-1 text-blue-600">
-            <User size={22} fill="currentColor"/><span className="text-[10px] font-black">我的</span>
+          <div style={statItem}>
+            <div style={statLabel}><MapIcon size={20}/> Routes</div>
+            <div style={statValue}>18 Entries</div>
           </div>
         </div>
       </div>
-    </AppContainer>
+
+      {/* 底部导航栏 (保持与 Home 页面一致) */}
+      <div style={bottomNavStyle}>
+        <div onClick={() => window.location.href='/'} style={navItem}><MapPin size={22} /><span>大观</span></div>
+        <div onClick={() => window.location.href='/routes'} style={navItem}><Compass size={22} /><span>路线</span></div>
+        <div style={navAddWrapper}><div style={navAddBtn}>+</div></div>
+        <div onClick={() => window.location.href='/walking'} style={navItem}><Footprints size={22} /><span>游玩</span></div>
+        <div style={navActive}><User size={22} /><span>我的</span></div>
+      </div>
+      <div style={notchStyle}></div>
+    </div>
   );
 }
+
+// 样式复用自 Home 页面
+const appContainerStyle: React.CSSProperties = { width: "390px", height: "844px", margin: "20px auto", background: "#fff", borderRadius: "40px", position: "relative", border: "8px solid #1a1a1a", overflow: "hidden" };
+const contentAreaStyle: React.CSSProperties = { width: "100%", height: "100%", overflowY: 'auto' };
+const avatarWrapper: React.CSSProperties = { width: '100%', aspectRatio: '1/1', borderRadius: '24px', overflow: 'hidden', background: '#f5f5f5' };
+const imgFit: React.CSSProperties = { width: '100%', height: '100%', objectFit: 'cover' };
+const creatorBtnStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 15px', border: '1px solid #eee', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold', color: '#666', marginTop: '15px' };
+const statItem: React.CSSProperties = { marginBottom: '30px' };
+const statLabel: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: '10px', color: '#333', fontWeight: 'bold', fontSize: '14px' };
+const statValue: React.CSSProperties = { fontSize: '36px', fontWeight: '900', letterSpacing: '-1px', marginTop: '5px' };
+const bottomNavStyle: React.CSSProperties = { position: "absolute", bottom: 0, width: "100%", height: "84px", background: "rgba(255,255,255,0.9)", backdropFilter: "blur(10px)", display: "flex", justifyContent: "space-around", alignItems: "center", paddingBottom: "20px", borderTop: "1px solid #eee" };
+const navItem: React.CSSProperties = { display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", color: "#ccc", fontSize: "10px", fontWeight: "bold", cursor: "pointer" };
+const navActive: React.CSSProperties = { ...navItem, color: "#2563EB" };
+const navAddWrapper: React.CSSProperties = { position: "relative", width: "50px", height: "50px" };
+const navAddBtn: React.CSSProperties = { position: "absolute", top: "-30px", left: "50%", transform: "translateX(-50%)", width: "56px", height: "56px", background: "#2563EB", borderRadius: "50%", color: "#fff", fontSize: "30px", display: "flex", justifyContent: "center", alignItems: "center", border: "6px solid #fff" };
+const notchStyle: React.CSSProperties = { position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: "150px", height: "30px", background: "#1a1a1a", borderBottomLeftRadius: "20px", borderBottomRightRadius: "20px" };
