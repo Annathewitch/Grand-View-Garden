@@ -8,7 +8,18 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 // --- 样式定义（移至函数外，防止构建时解析冲突） ---
-const appContainerStyle: React.CSSProperties = { width: "390px", height: "844px", margin: "20px auto", background: "#fff", borderRadius: "45px", position: "relative", border: "10px solid #1e293b", overflow: "hidden", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.4)" };
+const appContainerStyle: React.CSSProperties = { 
+  width: "390px", 
+  height: "844px", 
+  margin: "0 auto", // 确保居中
+  background: "#fff", 
+  borderRadius: "45px", 
+  position: "relative", 
+  border: "10px solid #1e293b", 
+  overflow: "hidden", // 必须保留，确保内容不出框
+  display: "flex",    // 新增：确保内容垂直排列
+  flexDirection: "column" // 新增
+};
 const contentAreaStyle: React.CSSProperties = { width: "100%", height: "100%", position: "relative", display: 'flex', flexDirection: 'column' };
 const headerContainer: React.CSSProperties = { padding: '60px 20px 20px' };
 const searchCircle: React.CSSProperties = { width: '40px', height: '40px', background: '#f1f5f9', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' };
