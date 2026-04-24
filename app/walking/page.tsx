@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Footprints, Clock, Flame, Play, Check, Compass, User, Settings } from "lucide-react";
+import { MapPin, Footprints, Clock, Flame, Check, Compass, User, Settings } from "lucide-react";
 
 export default function WalkingPage() {
   const router = useRouter();
@@ -70,8 +70,7 @@ export default function WalkingPage() {
                 <p style={{ marginTop: '20px', lineHeight: '2' }}>
                   📅 <b>{new Date().toLocaleDateString()}</b><br/>
                   今天我在梧桐区漫步了 <b>1.8公里</b>。<br/>
-                  打卡了 <b>{checkedPoints.length}</b> 个地点，<br/>
-                  感受到了春天的气息。🌸
+                  打卡了 <b>{checkedPoints.length}</b> 个地点，感受到了春天的气息。🌸
                 </p>
                 <button onClick={() => router.push('/')} style={primaryBtn}>保存手账</button>
               </div>
@@ -80,6 +79,7 @@ export default function WalkingPage() {
         </AnimatePresence>
       </div>
 
+      {/* 底部导航栏 */}
       <div style={bottomNavStyle}>
         <div onClick={() => router.push('/')} style={navInactive}><MapPin size={22} /><span>大观</span></div>
         <div onClick={() => router.push('/routes')} style={navInactive}><Compass size={22} /><span>路线</span></div>
@@ -92,17 +92,17 @@ export default function WalkingPage() {
   );
 }
 
-// 样式复用与 Walking 专用样式
-const appContainerStyle: React.CSSProperties = { width: "390px", height: "844px", background: "#fff", borderRadius: "45px", position: "relative", border: "10px solid #1e293b", overflow: "hidden" };
-const contentAreaStyle: React.CSSProperties = { width: "100%", height: "100%", position: "relative" };
+// 游玩页样式修复
+const appContainerStyle: React.CSSProperties = { width: "390px", height: "844px", margin: "0 auto", background: "#fff", borderRadius: "45px", position: "relative", border: "10px solid #1e293b", overflow: "hidden", display: "flex", flexDirection: "column" };
+const contentAreaStyle: React.CSSProperties = { flex: 1, position: "relative", overflowY: "auto" };
 const headerStyle: React.CSSProperties = { padding: '60px 25px 20px', display: 'flex', justifyContent: 'space-between' };
-const centerFlex: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60%' };
+const centerFlex: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' };
 const iconCircle: React.CSSProperties = { width: '80px', height: '80px', background: '#f0f9ff', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' };
 const primaryBtn: React.CSSProperties = { width: '200px', background: '#3B82F6', color: '#fff', border: 'none', padding: '15px', borderRadius: '15px', fontWeight: 'bold', cursor: 'pointer' };
 const progressCard: React.CSSProperties = { background: '#f8fafc', padding: '20px', borderRadius: '20px', marginBottom: '20px' };
 const progressBg: React.CSSProperties = { width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px' };
 const progressFill: React.CSSProperties = { height: '100%', background: '#3B82F6', borderRadius: '4px' };
-const listScroll: React.CSSProperties = { height: '320px', overflowY: 'auto', marginBottom: '20px' };
+const listScroll: React.CSSProperties = { maxHeight: '300px', overflowY: 'auto', marginBottom: '20px' };
 const itemInactive: React.CSSProperties = { padding: '15px', borderRadius: '15px', border: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', marginBottom: '10px', cursor: 'pointer' };
 const itemActive: React.CSSProperties = { ...itemInactive, background: '#f0fdf4', borderColor: '#10B981' };
 const statsRow: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', marginBottom: '20px' };
@@ -110,7 +110,7 @@ const statBox: React.CSSProperties = { fontSize: '12px', color: '#64748b', displ
 const finishBtn: React.CSSProperties = { ...primaryBtn, width: '100%', background: '#1e293b' };
 const journalOverlay: React.CSSProperties = { position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center' };
 const journalPaper: React.CSSProperties = { background: '#fff', width: '320px', padding: '30px', borderRadius: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' };
-const bottomNavStyle: React.CSSProperties = { position: "absolute", bottom: 0, width: "100%", height: "85px", background: "#fff", display: "flex", justifyContent: "space-around", alignItems: "center", paddingBottom: "15px", borderTop: "1px solid #f1f5f9" };
+const bottomNavStyle: React.CSSProperties = { width: "100%", height: "85px", background: "#fff", display: "flex", justifyContent: "space-around", alignItems: "center", paddingBottom: "15px", borderTop: "1px solid #f1f5f9" };
 const navInactive: React.CSSProperties = { display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", color: "#cbd5e1", fontSize: "10px", fontWeight: "700", cursor: "pointer" };
 const navActive: React.CSSProperties = { ...navInactive, color: "#3B82F6" };
 const addBtnOuter: React.CSSProperties = { position: "relative", width: "50px", height: "50px" };
