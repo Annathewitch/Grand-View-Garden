@@ -1,42 +1,38 @@
 "use client";
 import { useState } from 'react';
-// 修正图标名称：ArtTrack 改为 GalleryVertical
-import { Search, MapPin, Coffee, GalleryVertical, Trees as Tree, Menu } from 'lucide-react';
+import { 
+  Search, MapPin, Coffee, GalleryVertical, 
+  Trees as Tree, Menu, Compass, Footprints, User 
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import AppContainer from '../../components/AppContainer';
+import AppContainer from '../components/AppContainer';
 
-export default function MapPage() {
+export default function AppMain() {
   const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState('大观');
 
-  // 这里的坐标是相对于 390px 宽度的屏幕计算的
-  // 你可以根据 shanghai-map.png 的实际位置微调这些数值
+  // 地标坐标（相对于 390px 宽度）
   const mapPoints = [
-    { id: 1, x: 260, y: 380 },
-    { id: 2, x: 100, y: 320 },
-    { id: 3, x: 180, y: 420 },
-    { id: 4, x: 210, y: 150 },
-  ];
-
-  const categories = [
-    { name: '咖啡店', icon: <Coffee size={14} />, active: true },
-    { name: '展览', icon: <GalleryVertical size={14} />, active: false },
-    { name: '自然', icon: <Tree size={14} />, active: false },
+    { id: 1, x: 260, y: 380, title: "xx咖啡店一日游" },
+    { id: 2, x: 100, y: 320, title: "武康路老建筑" },
+    { id: 3, x: 180, y: 450, title: "隐秘艺术馆" },
   ];
 
   return (
     <AppContainer>
+      {/* 整个 App 的主容器，定位参考系 */}
       <div className="relative w-full h-full overflow-hidden bg-[#FDFDFB]">
         
-        {/* 1. 地图背景层 - 确保图片铺满手机屏幕 */}
+        {/* 1. 地图背景 - 铺满整个容器 */}
         <img 
           src="/shanghai-map.png" 
           className="absolute inset-0 w-full h-full object-cover"
           alt="Map Background"
-          onClick={() => setSelectedPoint(null)} // 点击地图空白处关闭卡片
+          onClick={() => setSelectedPoint(null)}
         />
 
-        {/* 2. 搜索栏 - 悬浮在最上层 */}
-        <div className="absolute top-14 left-4 right-4 z-30">
+        {/* 2. 顶部搜索栏 */}
+        <div className="absolute top-12 left-4 right-4 z-30">
           <div className="bg-white rounded-2xl shadow-xl h-14 flex items-center px-4 gap-3 border border-black/5">
             <Menu size={22} className="text-gray-400" />
             <input 
@@ -47,18 +43,20 @@ export default function MapPage() {
           </div>
         </div>
 
-        {/* 3. 分类选项卡 - 增加阴影和模糊感 */}
-        <div className="absolute top-[135px] left-4 right-4 z-30 flex gap-2">
-          {categories.map((cat) => (
-            <div 
-              key={cat.name}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-full shadow-lg backdrop-blur-sm transition-all
-                ${cat.active ? 'bg-blue-600 text-white' : 'bg-white/90 text-gray-600 border border-black/5'}`}
-            >
-              {cat.icon}
-              <span className="text-[13px] font-bold tracking-tight">{cat.name}</span>
-            </div>
-          ))}
+        {/* 3. 分类选项卡 */}
+        <div className="absolute top-[115px] left-4 right-4 z-30 flex gap-2 overflow-x-auto no-scrollbar pb-2">
+          <div className="flex-shrink-0 flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-full shadow-lg">
+            <Coffee size={14} />
+            <span className="text-[13px] font-bold">咖啡店</span>
+          </div>
+          <div className="flex-shrink-0 flex items-center gap-2 bg-white/90 backdrop-blur-md text-gray-600 px-5 py-2.5 rounded-full shadow-sm border border-black/5">
+            <GalleryVertical size={14} />
+            <span className="text-[13px] font-bold">展览</span>
+          </div>
+          <div className="flex-shrink-0 flex items-center gap-2 bg-white/90 backdrop-blur-md text-gray-600 px-5 py-2.5 rounded-full shadow-sm border border-black/5">
+            <Tree size={14} />
+            <span className="text-[13px] font-bold">自然</span>
+          </div>
         </div>
 
         {/* 4. 红色地标点 */}
@@ -69,71 +67,72 @@ export default function MapPage() {
             className="absolute z-20 cursor-pointer transform -translate-x-1/2 -translate-y-full active:scale-90 transition-transform"
             style={{ left: `${point.x}px`, top: `${point.y}px` }}
           >
-            <div className="relative">
-              {/* 地标主体的红色水滴感 */}
-              <MapPin 
-                size={36} 
-                className={`${selectedPoint === point.id ? 'text-red-600' : 'text-red-500'}`}
-                fill="currentColor"
-                stroke="white"
-                strokeWidth={2}
-              />
-              {/* 选中时的呼吸灯效果 */}
-              {selectedPoint === point.id && (
-                <span className="absolute inset-0 animate-ping rounded-full bg-red-400 opacity-20"></span>
-              )}
-            </div>
+            <MapPin 
+              size={36} 
+              className={`${selectedPoint === point.id ? 'text-red-600' : 'text-red-500'}`}
+              fill="currentColor"
+              stroke="white"
+              strokeWidth={2}
+            />
           </div>
         ))}
 
-        {/* 5. 底部弹出卡片 - 严格还原图 3 */}
+        {/* 5. 交互弹出卡片 (图3效果) */}
         <AnimatePresence>
           {selectedPoint && (
             <motion.div 
-              initial={{ y: 200, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 200, opacity: 0 }}
-              className="absolute bottom-6 left-4 right-4 z-40"
+              initial={{ y: 300, opacity: 0 }}
+              animate={{ y: 0 }}
+              exit={{ y: 300, opacity: 0 }}
+              className="absolute bottom-[90px] left-4 right-4 z-40"
             >
-              <div className="bg-white rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden border border-black/5">
-                {/* 咖啡厅封面图 */}
-                <div className="h-48 w-full relative">
+              <div className="bg-white rounded-[32px] shadow-2xl overflow-hidden border border-black/5">
+                <div className="h-44 w-full bg-gray-100">
                   <img 
-                    src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80" 
+                    src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800" 
                     className="w-full h-full object-cover"
-                    alt="Cafe Exhibit"
+                    alt="Place"
                   />
-                  <div className="absolute top-4 right-4 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full">
-                    <span className="text-white text-[10px] font-bold">已收录</span>
-                  </div>
                 </div>
-                
-                {/* 文字内容区 */}
                 <div className="p-6">
-                  <h3 className="text-[19px] font-black text-slate-900 tracking-tight leading-tight">
-                    xx咖啡店一日游，沉浸式体验
+                  <h3 className="text-lg font-black text-slate-900 leading-tight">
+                    {mapPoints.find(p => p.id === selectedPoint)?.title}，沉浸式体验
                   </h3>
-                  <p className="text-[13px] text-slate-500 mt-3 font-medium leading-relaxed">
-                    新开在武汉大学内部的这家咖啡店简直就是 citywalk 的不二去处，窗外阳光极好...
+                  <p className="text-[12px] text-slate-500 mt-2 font-medium">
+                    新开在武大内部的这家咖啡店简直就是 citywalk 的不二去处...
                   </p>
-                  
-                  {/* 操作按钮 */}
-                  <div className="flex justify-end gap-3 mt-8">
-                    <button 
-                      onClick={() => setSelectedPoint(null)}
-                      className="px-6 py-3 text-sm font-bold text-slate-400 active:scale-95 transition-transform"
-                    >
-                      Secondary
-                    </button>
-                    <button className="px-10 py-3 text-sm font-black text-white bg-blue-600 rounded-2xl shadow-lg shadow-blue-200 active:scale-95 transition-transform">
-                      Primary
-                    </button>
+                  <div className="flex justify-end gap-3 mt-6">
+                    <button onClick={() => setSelectedPoint(null)} className="px-5 py-2.5 text-xs font-bold text-slate-400">Secondary</button>
+                    <button className="px-8 py-2.5 text-xs font-black text-white bg-blue-600 rounded-xl shadow-lg shadow-blue-200">Primary</button>
                   </div>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* 6. 底部导航栏 - 必须在框内定位 */}
+        <div className="absolute bottom-0 left-0 right-0 h-[84px] bg-white/90 backdrop-blur-xl border-t border-gray-100 flex justify-around items-center px-4 z-50 pb-4">
+          <div className="flex flex-col items-center gap-1 text-blue-600">
+            <MapPin size={22} fill="currentColor"/>
+            <span className="text-[10px] font-black">大观</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 text-gray-300">
+            <Compass size={22}/>
+            <span className="text-[10px] font-bold">路线</span>
+          </div>
+          <div className="relative w-12 h-12">
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 bg-blue-600 rounded-full border-[6px] border-white shadow-lg flex items-center justify-center text-white text-3xl font-light active:scale-95 transition-transform">+</div>
+          </div>
+          <div className="flex flex-col items-center gap-1 text-gray-300">
+            <Footprints size={22}/>
+            <span className="text-[10px] font-bold">游玩</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 text-gray-300">
+            <User size={22}/>
+            <span className="text-[10px] font-bold">我的</span>
+          </div>
+        </div>
 
       </div>
     </AppContainer>
