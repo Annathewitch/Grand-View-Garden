@@ -1,10 +1,9 @@
 "use client";
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AIRecommendation } from '../../components/AIRecommendation';
 import { 
-  Sparkles, Navigation, 
-  Compass, MapPin, Footprints, User, Search, Flame, Bookmark, Heart
+  Sparkles, Navigation, Compass, MapPin, 
+  Footprints, User, Search, Flame, Bookmark, Heart, Settings 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,6 +12,7 @@ export default function RoutesPage() {
   const [activeTab, setActiveTab] = useState('推荐');
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
 
+  // 模拟数据
   const posts = [
     {
       id: 1,
@@ -38,183 +38,168 @@ export default function RoutesPage() {
 
   return (
     <div style={appContainerStyle}>
-          <div style={contentAreaStyle}>
-            {/* 顶部状态与设置 */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '50px 20px 0' }}>
-              <Settings size={24} color="#333" />
-            </div>
-
-        {/* 🔥 顶部（适配刘海） */}
-        <div className="pt-6 px-6 pb-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-serif font-black">探索路线</h1>
-            <div className="p-2.5 bg-slate-100 rounded-full active:scale-90 transition">
-              <Search size={18} className="text-slate-500" />
-            </div>
+      <div style={contentAreaStyle}>
+        
+        {/* 顶部标题与搜索 */}
+        <div style={headerContainer}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h1 style={{ fontSize: '26px', fontWeight: '900', letterSpacing: '-1px' }}>探索路线</h1>
+            <div style={searchCircle}><Search size={18} color="#64748b" /></div>
           </div>
 
-          {/* Tab */}
-          <div className="flex gap-8 mt-6">
+          {/* Tab 导航 */}
+          <div style={tabRow}>
             {['推荐', '附近', '最新', '收藏'].map(tab => (
-              <button 
-                key={tab}
+              <div 
+                key={tab} 
                 onClick={() => setActiveTab(tab)}
-                className={`pb-2 text-sm font-black relative ${
-                  activeTab === tab ? 'text-slate-900' : 'text-slate-300'
-                }`}
+                style={activeTab === tab ? tabActive : tabInactive}
               >
                 {tab}
-                {activeTab === tab && (
-                  <motion.div 
-                    layoutId="tabLine" 
-                    className="absolute bottom-0 left-0 right-0 h-1 bg-[#8B2B2B] rounded-full" 
-                  />
-                )}
-              </button>
+                {activeTab === tab && <motion.div layoutId="underline" style={tabUnderline} />}
+              </div>
             ))}
           </div>
         </div>
 
-        {/* AI卡片 */}
-        <div className="px-5 mb-4">
-          <div className="bg-gradient-to-r from-[#1E1E1E] to-[#3A3A3A] rounded-3xl p-4 flex justify-between items-center shadow-xl">
-            <div className="flex gap-3 items-center">
-              <Sparkles className="text-blue-400" size={18}/>
+        {/* AI 定制入口卡片 */}
+        <div style={{ padding: '0 20px', marginBottom: '25px' }}>
+          <div style={aiCardStyle}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={aiIconBg}><Sparkles size={16} color="#60A5FA" /></div>
               <div>
-                <p className="text-xs text-white font-bold">AI 路线定制</p>
-                <p className="text-[10px] text-white/50">输入心情生成路线</p>
+                <div style={{ color: '#fff', fontSize: '13px', fontWeight: 'bold' }}>AI 路线定制</div>
+                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px' }}>输入心情，即刻出发</div>
               </div>
             </div>
-            <button className="bg-blue-500 p-2 rounded-xl text-white active:scale-95">
-              <Navigation size={14}/>
-            </button>
+            <button style={aiActionBtn}><Navigation size={14} color="white" /></button>
           </div>
         </div>
 
-        {/* 瀑布流 */}
-        <div className="flex-1 overflow-y-auto px-5 space-y-8 pb-28">
+        {/* 路线列表流 */}
+        <div style={scrollArea}>
           {posts.map(post => (
             <motion.div 
-              key={post.id}
+              key={post.id} 
+              whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedPost(post)}
-              className="cursor-pointer"
-              whileTap={{ scale: 0.97 }}
+              style={postCardContainer}
             >
-              <div className="relative aspect-[4/5] rounded-[30px] overflow-hidden shadow-lg">
-                <img src={post.cover} className="w-full h-full object-cover"/>
-
-                {/* 操作按钮 */}
-                <div className="absolute top-4 right-4 flex flex-col gap-2">
-                  <div className="w-9 h-9 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center">
-                    <Heart size={16}/>
-                  </div>
-                  <div className="w-9 h-9 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center">
-                    <Bookmark size={16}/>
-                  </div>
+              <div style={imageWrapper}>
+                <img src={post.cover} style={fullImg} />
+                <div style={postOverlay}>
+                  {post.hot && (
+                    <div style={hotBadge}><Flame size={10} /> HOT</div>
+                  )}
+                  <h3 style={postTitleText}>{post.title}</h3>
                 </div>
-
-                {/* 底部渐变 */}
-                <div className="absolute bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                  <div className="flex gap-2 mb-2">
-                    {post.hot && (
-                      <span className="bg-red-500 text-white text-[8px] px-2 py-1 rounded-md flex items-center gap-1">
-                        <Flame size={8}/> HOT
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-white font-bold leading-tight">
-                    {post.title}
-                  </h3>
+                {/* 悬浮操作按钮 */}
+                <div style={actionFloat}>
+                   <div style={iconBtnSmall}><Heart size={14} /></div>
+                   <div style={iconBtnSmall}><Bookmark size={14} /></div>
                 </div>
               </div>
-
-              {/* 作者 */}
-              <div className="flex justify-between mt-3 text-sm items-center">
-                <div className="flex items-center gap-2">
-                  <img src={post.avatar} className="w-7 h-7 rounded-full"/>
-                  <span className="text-xs text-gray-500">by {post.author}</span>
+              
+              <div style={postFooter}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <img src={post.avatar} style={authorAvatar} />
+                  <span style={authorName}>by {post.author}</span>
                 </div>
-                <span className="text-xs text-gray-400">{post.stats.walkCount}人</span>
+                <span style={walkStat}>{post.stats.walkCount} 人走过</span>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* 🔥 iOS底部弹窗 */}
+        {/* 详情弹出层 */}
         <AnimatePresence>
           {selectedPost && (
             <>
-              <motion.div
-                className="absolute inset-0 bg-black/30 backdrop-blur-md z-40"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+              <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 onClick={() => setSelectedPost(null)}
+                style={backdropOverlay}
               />
-
-              <motion.div
-                className="absolute bottom-0 left-0 right-0 bg-white rounded-t-[30px] p-6 z-50"
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                exit={{ y: "100%" }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              <motion.div 
+                initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                style={bottomSheet}
               >
-                <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mb-4"/>
-
-                <img src={selectedPost.cover} className="rounded-xl mb-4"/>
-
-                <h2 className="font-bold text-lg mb-2">{selectedPost.title}</h2>
-
-                <p className="text-sm text-gray-500 mb-4">
-                  这是一条适合周末散步的路线，结合咖啡与城市漫游体验。
+                <div style={sheetHandle} />
+                <img src={selectedPost.cover} style={sheetImg} />
+                <h2 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '10px' }}>{selectedPost.title}</h2>
+                <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.6', marginBottom: '20px' }}>
+                  这条路线将带你领略海派文化的精髓，结合了独立咖啡馆、历史建筑与宁静的里弄小巷。
                 </p>
-
-                <div className="flex justify-between text-xs text-gray-400 mb-4">
+                <div style={sheetStatsRow}>
                   <span>🚶 {selectedPost.stats.distance}</span>
                   <span>⏱ {selectedPost.stats.time}</span>
-                  <span>🔥 {selectedPost.stats.walkCount}</span>
+                  <span>🔥 {selectedPost.stats.walkCount} 人</span>
                 </div>
-
-                <button
+                <button 
                   onClick={() => router.push('/walking')}
-                  className="w-full bg-blue-500 text-white py-3 rounded-xl font-bold"
+                  style={startWalkBtn}
                 >
-                  去游玩
+                  开启这段旅程
                 </button>
               </motion.div>
             </>
           )}
         </AnimatePresence>
-
-        {/* 🔥 iOS底部导航 */}
-        <div className="absolute bottom-0 left-0 w-full h-[84px] bg-white/90 backdrop-blur-xl border-t border-gray-100 flex justify-around items-center pb-5">
-          
-          <div onClick={() => router.push('/map')} className="flex flex-col items-center text-gray-400 text-[10px]">
-            <MapPin size={22}/>
-            大观
-          </div>
-
-          <div className="flex flex-col items-center text-blue-500 text-[10px]">
-            <Compass size={22}/>
-            路线
-          </div>
-
-          <div className="w-12 h-12 bg-blue-500 rounded-full text-white flex items-center justify-center mb-8 shadow-lg">
-            +
-          </div>
-
-          <div onClick={() => router.push('/walking')} className="flex flex-col items-center text-gray-400 text-[10px]">
-            <Footprints size={22}/>
-            游玩
-          </div>
-
-          <div onClick={() => router.push('/profile')} className="flex flex-col items-center text-gray-400 text-[10px]">
-            <User size={22}/>
-            我的
-          </div>
-        </div>
-
       </div>
-    </AppContainer>
+
+      {/* 底部导航 */}
+      <div style={bottomNavStyle}>
+        <div onClick={() => router.push('/')} style={navInactive}><MapPin size={22} /><span>大观</span></div>
+        <div style={navActive}><Compass size={22} /><span>路线</span></div>
+        <div style={addBtnOuter}><div style={addBtnInner}>+</div></div>
+        <div onClick={() => router.push('/walking')} style={navInactive}><Footprints size={22} /><span>游玩</span></div>
+        <div onClick={() => router.push('/profile'} style={navInactive}><User size={22} /><span>我的</span></div>
+      </div>
+
+      <div style={iphoneNotch}></div>
+    </div>
   );
 }
+
+// ================= 样式系统 =================
+
+const appContainerStyle: React.CSSProperties = { width: "390px", height: "844px", margin: "20px auto", background: "#fff", borderRadius: "45px", position: "relative", border: "10px solid #1e293b", overflow: "hidden", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.4)" };
+const contentAreaStyle: React.CSSProperties = { width: "100%", height: "100%", position: "relative", display: 'flex', flexDirection: 'column' };
+
+const headerContainer: React.CSSProperties = { padding: '60px 20px 20px' };
+const searchCircle: React.CSSProperties = { width: '40px', height: '40px', background: '#f1f5f9', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center' };
+
+const tabRow: React.CSSProperties = { display: 'flex', gap: '25px', marginTop: '25px' };
+const tabInactive: React.CSSProperties = { fontSize: '14px', fontWeight: '800', color: '#cbd5e1', cursor: 'pointer', position: 'relative', paddingBottom: '8px' };
+const tabActive: React.CSSProperties = { ...tabInactive, color: '#1e293b' };
+const tabUnderline: React.CSSProperties = { position: 'absolute', bottom: 0, left: 0, right: 0, height: '4px', background: '#3B82F6', borderRadius: '2px' };
+
+const aiCardStyle: React.CSSProperties = { background: 'linear-gradient(90deg, #1e293b 0%, #334155 100%)', borderRadius: '24px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' };
+const aiIconBg: React.CSSProperties = { width: '32px', height: '32px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' };
+const aiActionBtn: React.CSSProperties = { background: '#3B82F6', border: 'none', width: '32px', height: '32px', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' };
+
+const scrollArea: React.CSSProperties = { flex: 1, overflowY: 'auto', padding: '0 20px 100px' };
+const postCardContainer: React.CSSProperties = { marginBottom: '30px', cursor: 'pointer' };
+const imageWrapper: React.CSSProperties = { position: 'relative', width: '100%', aspectRatio: '4/5', borderRadius: '30px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.08)' };
+const fullImg: React.CSSProperties = { width: '100%', height: '100%', objectFit: 'cover' };
+const postOverlay: React.CSSProperties = { position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' };
+const hotBadge: React.CSSProperties = { background: '#EF4444', color: '#fff', fontSize: '8px', fontWeight: 'bold', padding: '4px 8px', borderRadius: '6px', width: 'fit-content', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' };
+const postTitleText: React.CSSProperties = { color: '#fff', fontSize: '16px', fontWeight: '800', lineHeight: '1.4' };
+
+const actionFloat: React.CSSProperties = { position: 'absolute', top: '15px', right: '15px', display: 'flex', flexDirection: 'column', gap: '10px' };
+const iconBtnSmall: React.CSSProperties = { width: '34px', height: '34px', background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#1e293b' };
+
+const postFooter: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', padding: '0 5px' };
+const authorAvatar: React.CSSProperties = { width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' };
+const authorName: React.CSSProperties = { fontSize: '12px', color: '#64748b', fontWeight: '500' };
+const walkStat: React.CSSProperties = { fontSize: '11px', color: '#94a3b8' };
+
+const backdropOverlay: React.CSSProperties = { position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', zIndex: 300 };
+const bottomSheet: React.CSSProperties = { position: 'absolute', bottom: 0, left: 0, right: 0, background: '#fff', borderRadius: '32px 32px 0 0', padding: '10px 25px 40px', zIndex: 400 };
+const sheetHandle: React.CSSProperties = { width: '40px', height: '5px', background: '#e2e8f0', borderRadius: '3px', margin: '0 auto 20px' };
+const sheetImg: React.CSSProperties = { width: '100%', height: '160px', objectFit: 'cover', borderRadius: '20px', marginBottom: '20px' };
+const sheetStatsRow: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#94a3b8', marginBottom: '25px', background: '#f8fafc', padding: '12px', borderRadius: '15px' };
+const startWalkBtn: React.CSSProperties = { width: '100%', background: '#3B82F6', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontSize: '15px', fontWeight: 'bold', cursor: 'pointer' };
+
+const bottomNavStyle: React.CSSProperties = { position: "absolute", bottom: 0, width: "100%", height: "85px", background: "rgba(255, 255, 255, 0.95)", backdropFilter: "blur(10
