@@ -61,15 +61,15 @@ export default function AppContainer({ children }: { children: React.ReactNode }
           </div>
         </div>
 
-        {/* 内容区 */}
+        /* 内容区 */
         <div
           style={{
             position: "absolute",
-            top: "44px",
-            bottom: "0",
+            top: "0px",      // 顶部覆盖状态栏，由内容组件决定避让
+            bottom: "0px",
             left: 0,
             right: 0,
-            overflow: "hidden",
+            overflow: "hidden", // 关键：确保内部绝对定位的内容不会超出手机壳
           }}
         >
           {children}
