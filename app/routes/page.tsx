@@ -1,7 +1,6 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AppContainer from '../../components/AppContainer';
 import { AIRecommendation } from '../../components/AIRecommendation';
 import { 
   Sparkles, Navigation, 
@@ -38,8 +37,12 @@ export default function RoutesPage() {
   ];
 
   return (
-    <AppContainer>
-      <div className="h-full w-full flex flex-col bg-[#FDFDFB] relative overflow-hidden">
+    <div style={appContainerStyle}>
+          <div style={contentAreaStyle}>
+            {/* 顶部状态与设置 */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '50px 20px 0' }}>
+              <Settings size={24} color="#333" />
+            </div>
 
         {/* 🔥 顶部（适配刘海） */}
         <div className="pt-6 px-6 pb-4">
