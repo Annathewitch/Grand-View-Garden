@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import AppContainer from '../../components/AppContainer';
 import { AIRecommendation } from '../../components/AIRecommendation';
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Footprints, Clock, Flame, Play, Check } from "lucide-react";
@@ -35,8 +34,12 @@ export default function WalkingPage() {
   };
 
   return (
-    <AppContainer>
-      <div className="h-full w-full flex flex-col bg-[#FDFDFB]">
+    <div style={appContainerStyle}>
+          <div style={contentAreaStyle}>
+            {/* 顶部状态与设置 */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '50px 20px 0' }}>
+              <Settings size={24} color="#333" />
+            </div>
 
         {/* 顶部 */}
         <div className="pt-6 px-6 pb-4">
