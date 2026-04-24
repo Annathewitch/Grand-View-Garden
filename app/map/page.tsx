@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
-import AppContainer from "@/components/AppContainer";
+import AppContainer from '../../components/AppContainer';
+import { AIRecommendation } from '../../components/AIRecommendation';
 import { MapPin, Coffee, Palette, Trees as Tree } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
