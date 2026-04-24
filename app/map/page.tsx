@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { Search, MapPin, Coffee, ArtTrack, Trees as Tree } from 'lucide-react';
+import { Search, MapPin, Coffee, Palette, Trees as Tree } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function MapPage() {
@@ -14,20 +14,20 @@ export default function MapPage() {
     { id: 3, x: 195, y: 220, desc: "上海博物馆" },
     { id: 4, x: 260, y: 195, desc: "外滩" },
   ];
-
+  
   const categories = [
     { name: '咖啡店', icon: <Coffee size={14}/> },
-    { name: '展览', icon: <ArtTrack size={14}/> },
+    { name: '展览', icon: <Palette size={14}/> },
     { name: '自然', icon: <Tree size={14}/> },
   ];
-
+  
   return (
     <div className="h-full w-full relative">
       
       {/* 自定义地图图片背景 */}
-      <img 
-        src="/shanghai-map.png" 
-        className="absolute inset-0 w-full h-full object-cover z-10" 
+      <img
+        src="/shanghai-map.png"
+        className="absolute inset-0 w-full h-full object-cover z-10"
         alt="Map background"
       />
 
@@ -35,8 +35,8 @@ export default function MapPage() {
       <div className="absolute top-10 left-4 right-4 z-30">
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-3.5 flex items-center gap-3">
           <MapPin className="text-gray-400" size={18} />
-          <input 
-            placeholder="告诉 AI 你的心情，定制 CityWalk 路线..." 
+          <input
+            placeholder="告诉 AI 你的心情，定制 CityWalk 路线..."
             className="flex-1 bg-transparent outline-none text-[13px] text-gray-800 placeholder:text-gray-300"
           />
         </div>
