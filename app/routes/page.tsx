@@ -1,7 +1,8 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AppContainer from "@/components/AppContainer";
+import AppContainer from '../../components/AppContainer';
+import { AIRecommendation } from '../../components/AIRecommendation';
 import { 
   Sparkles, Navigation, 
   Compass, MapPin, Footprints, User, Search, Flame, Bookmark, Heart
