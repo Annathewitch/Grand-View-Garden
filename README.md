@@ -27,3 +27,6 @@ Grand View Garden 是一款为城市漫步（CityWalk）爱好者设计的轻量
 ├── hooks/            # 自定义业务逻辑 (如行走记录器)
 ├── public/           # 静态资源
 └── tailwind.config.ts # Tailwind 样式配置
+
+## figma样板
+https://www.figma.com/design/pqFI5zd8LWW3KoPIS6EKz6/Grand-View-Garden?node-id=0-1&m=dev&t=box3Dmx9kxRgcD4V-1
